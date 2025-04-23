@@ -5,58 +5,97 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Supabase Project Pinger Status</title>
     <style>
+        :root {
+            --primary-color: #3ecf8e;
+            --primary-dark: #2eb67d;
+            --error-color: #ff4d4f;
+            --bg-color: #f8f9fa;
+            --text-color: #2c3e50;
+            --border-radius: 8px;
+            --shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            max-width: 800px;
+            max-width: 900px;
             margin: 0 auto;
             padding: 20px;
-            background-color: #f5f5f5;
+            background-color: #f0f2f5;
+            color: var(--text-color);
+            line-height: 1.6;
         }
+
         .container {
             background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 30px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
         }
+
         h1 {
-            color: #3ecf8e;
-            margin-bottom: 20px;
+            color: var(--primary-color);
+            margin: 0 0 30px 0;
+            font-size: 2.2em;
+            font-weight: 600;
         }
+
         .project {
-            padding: 15px;
-            margin-bottom: 10px;
-            border-radius: 4px;
-            background-color: #f8f9fa;
+            padding: 20px;
+            margin-bottom: 15px;
+            border-radius: var(--border-radius);
+            background-color: var(--bg-color);
+            transition: transform 0.2s ease;
+            border: 1px solid #e9ecef;
         }
+
+        .project:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow);
+        }
+
         .project.success {
-            border-left: 4px solid #3ecf8e;
+            border-left: 4px solid var(--primary-color);
         }
+
         .project.error {
-            border-left: 4px solid #ff4d4f;
+            border-left: 4px solid var(--error-color);
         }
+
         .status {
-            font-weight: bold;
-            margin-right: 10px;
+            font-weight: 600;
+            margin-right: 15px;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
         }
+
         .success .status {
-            color: #3ecf8e;
+            color: var(--primary-color);
+            background-color: rgba(62, 207, 142, 0.1);
         }
+
         .error .status {
-            color: #ff4d4f;
+            color: var(--error-color);
+            background-color: rgba(255, 77, 79, 0.1);
         }
+
         .last-updated {
             color: #666;
-            font-size: 0.9em;
-            margin-top: 20px;
+            font-size: 0.95em;
+            margin: 10px 0;
+            padding: 12px;
+            background-color: var(--bg-color);
+            border-radius: var(--border-radius);
+            border: 1px solid #e9ecef;
         }
+
         .refresh-button {
-            background-color: #3ecf8e;
+            background-color: var(--primary-color);
             color: white;
             border: none;
             padding: 15px 30px;
-            border-radius: 4px;
+            border-radius: var(--border-radius);
             cursor: pointer;
-            margin-top: 20px;
             font-size: 1.1em;
             display: flex;
             align-items: center;
@@ -65,14 +104,23 @@
             width: 100%;
             max-width: 300px;
             margin: 20px auto;
+            transition: all 0.2s ease;
+            font-weight: 500;
         }
+
         .refresh-button:hover {
-            background-color: #2eb67d;
+            background-color: var(--primary-dark);
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(62, 207, 142, 0.2);
         }
+
         .refresh-button:disabled {
             background-color: #cccccc;
             cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
         }
+
         .loading {
             display: inline-block;
             width: 20px;
@@ -82,23 +130,65 @@
             border-top-color: #fff;
             animation: spin 1s ease-in-out infinite;
         }
+
         @keyframes spin {
             to { transform: rotate(360deg); }
         }
+
         .header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            gap: 20px;
         }
+
         .error-details {
             background-color: #fff5f5;
-            padding: 10px;
-            border-radius: 4px;
-            margin-top: 5px;
-            font-family: monospace;
+            padding: 12px;
+            border-radius: var(--border-radius);
+            margin-top: 10px;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
             font-size: 0.9em;
             white-space: pre-wrap;
+            border: 1px solid #ffccc7;
+        }
+
+        .status-summary {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: var(--bg-color);
+            border-radius: var(--border-radius);
+            text-align: center;
+            border: 1px solid #e9ecef;
+        }
+
+        .project-name {
+            font-weight: 500;
+            font-size: 1.1em;
+            margin-left: 10px;
+        }
+
+        .project-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .container {
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 1.8em;
+            }
         }
     </style>
 </head>
@@ -112,7 +202,10 @@
             </button>
         </div>
         <div id="projects"></div>
-        <div class="last-updated" id="lastUpdated"></div>
+        <div class="status-summary">
+            <div class="last-updated" id="lastUpdated">Last ping: Never</div>
+            <div class="last-updated" id="nextPing">Pings are running every 5 minutes via GitHub Actions</div>
+        </div>
     </div>
 
     <script>
@@ -141,15 +234,20 @@
                     const projectDiv = document.createElement('div');
                     projectDiv.className = `project ${project.status}`;
                     
+                    const projectHeader = document.createElement('div');
+                    projectHeader.className = 'project-header';
+                    
                     const statusSpan = document.createElement('span');
                     statusSpan.className = 'status';
                     statusSpan.textContent = project.status.toUpperCase();
                     
                     const nameSpan = document.createElement('span');
+                    nameSpan.className = 'project-name';
                     nameSpan.textContent = project.name;
                     
-                    projectDiv.appendChild(statusSpan);
-                    projectDiv.appendChild(nameSpan);
+                    projectHeader.appendChild(statusSpan);
+                    projectHeader.appendChild(nameSpan);
+                    projectDiv.appendChild(projectHeader);
                     
                     if (project.error) {
                         const errorDiv = document.createElement('div');
@@ -161,14 +259,21 @@
                     projectsDiv.appendChild(projectDiv);
                 });
                 
-                document.getElementById('lastUpdated').textContent = `Last updated: ${new Date(data.timestamp).toLocaleString()}`;
+                const lastPingTime = new Date(data.timestamp);
+                document.getElementById('lastUpdated').textContent = `Last ping: ${lastPingTime.toLocaleString()}`;
+                
+                // Calculate next ping time (5 minutes from now)
+                const nextPingTime = new Date(lastPingTime.getTime() + 5 * 60 * 1000);
+                document.getElementById('nextPing').textContent = `Next scheduled ping: ${nextPingTime.toLocaleString()}`;
             } catch (error) {
                 console.error('Error fetching status:', error);
                 const projectsDiv = document.getElementById('projects');
                 projectsDiv.innerHTML = `
                     <div class="project error">
-                        <span class="status">ERROR</span>
-                        <span>Failed to ping projects</span>
+                        <div class="project-header">
+                            <span class="status">ERROR</span>
+                            <span class="project-name">Failed to ping projects</span>
+                        </div>
                         <div class="error-details">${error.message}</div>
                     </div>
                 `;
@@ -182,6 +287,9 @@
 
         // Fetch status on page load
         fetchStatus();
+        
+        // Refresh every minute to update the next ping time
+        setInterval(fetchStatus, 60 * 1000);
     </script>
 </body>
 </html> 

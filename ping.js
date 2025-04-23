@@ -14,20 +14,37 @@ async function pingProjects() {
     for (const project of config.supabase_projects) {
       console.log(`Pinging project: ${project.name}`);
       try {
-        const response = await axios.get(`${project.url}/rest/v1/`, {
+        // First, ping the REST API
+        const restResponse = await axios.get(`${project.url}/rest/v1/`, {
           timeout: 10000,
           headers: {
             'apikey': project.anon_key,
             'Authorization': `Bearer ${project.anon_key}`
           }
         });
+
+        // Then, make a database query to ensure real activity
+        const dbResponse = await axios.post(
+          `${project.url}/rest/v1/rpc/ping`,
+          {},
+          {
+            timeout: 10000,
+            headers: {
+              'apikey': project.anon_key,
+              'Authorization': `Bearer ${project.anon_key}`,
+              'Content-Type': 'application/json',
+              'Prefer': 'return=minimal'
+            }
+          }
+        );
         
-        console.log(`Success for ${project.name}: ${response.status}`);
+        console.log(`Success for ${project.name}: REST=${restResponse.status}, DB=${dbResponse.status}`);
         results.push({
           name: project.name,
           url: project.url,
           status: 'success',
-          statusCode: response.status
+          restStatus: restResponse.status,
+          dbStatus: dbResponse.status
         });
       } catch (error) {
         console.error(`Error pinging ${project.name}:`, error.message);

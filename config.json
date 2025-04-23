@@ -34,6 +34,11 @@
             "name": "DDC Employee Portal",
             "url": "https://pkuontfmhkqiukpwscbg.supabase.co",
             "anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrdW9udGZtaGtxaXVrcHdzY2JnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyMDQyNjksImV4cCI6MjA1OTc4MDI2OX0.m1MCpn2d6HUigCnHSPtb5GAA_20i02MIcsiz4EZJvt0"
+        },
+        {
+            "name": "Stepwise",
+            "url": "https://dtjwhchgvdhvjlaksfdm.supabase.co",
+            "anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0andoY2hndmRodmpsYWtzZmRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4NTAwNTAsImV4cCI6MjA2MDQyNjA1MH0.TjSWtZZ03L2RIr1dPCzHtJacR7SasVkv13SDkNdtydw"
         }
     ],
     "ping_interval_minutes": 15
