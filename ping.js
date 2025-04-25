@@ -60,6 +60,12 @@ async function pingProjects() {
 
     console.log('Ping process completed');
     console.log('Results:', JSON.stringify(results, null, 2));
+    
+    // Output results as JSON
+    process.stdout.write(JSON.stringify({
+      timestamp: new Date().toISOString(),
+      results
+    }, null, 2));
   } catch (error) {
     console.error('Critical error:', error);
     process.exit(1);

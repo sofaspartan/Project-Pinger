@@ -23,11 +23,19 @@ jobs:
         run: npm install
         
       - name: Run ping
+        id: ping
         run: |
           echo "Starting ping at $(date)"
           echo "GitHub Actions run ID: $GITHUB_RUN_ID"
           echo "GitHub Actions run number: $GITHUB_RUN_NUMBER"
-          node ping.js
+          node ping.js > ping-results.json
           echo "Completed ping at $(date)"
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Upload ping results
+        uses: actions/upload-artifact@v3
+        with:
+          name: ping-results
+          path: ping-results.json
+          retention-days: 30 
