@@ -31,8 +31,11 @@ jobs:
           echo "GitHub Actions run number: $GITHUB_RUN_NUMBER"
           echo "Current timezone: $(date +%Z)"
           echo "Current time: $(date)"
+          echo "Event type: ${{ github.event_name }}"
           node ping.js > ping-results.json
           echo "Completed ping at $(date)"
+          echo "Results:"
+          cat ping-results.json
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
