@@ -3,6 +3,7 @@ name: Supabase Project Pinger
 on:
   schedule:
     - cron: '*/15 * * * *'  # Runs every 15 minutes
+      timezone: 'UTC'  # Specify timezone
   workflow_dispatch:  # Allows manual triggering
   push:
     branches:
@@ -28,6 +29,8 @@ jobs:
           echo "Starting ping at $(date)"
           echo "GitHub Actions run ID: $GITHUB_RUN_ID"
           echo "GitHub Actions run number: $GITHUB_RUN_NUMBER"
+          echo "Current timezone: $(date +%Z)"
+          echo "Current time: $(date)"
           node ping.js > ping-results.json
           echo "Completed ping at $(date)"
         env:
