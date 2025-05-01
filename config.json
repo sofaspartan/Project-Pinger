@@ -1,6 +1,11 @@
 {
     "supabase_projects": [
         {
+            "name": "DDC Staff Directory",
+            "url": "https://pkuontfmhkqiukpwscbg.supabase.co",
+            "anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrdW9udGZtaGtxaXVrcHdzY2JnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyMDQyNjksImV4cCI6MjA1OTc4MDI2OX0.m1MCpn2d6HUigCnHSPtb5GAA_20i02MIcsiz4EZJvt0"
+        },
+        {
             "name": "Sofaspartan Media Player Comments Platform",
             "url": "https://tdgatkfrfaejitdafeas.supabase.co",
             "anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkZ2F0a2ZyZmFlaml0ZGFmZWFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2MDgyOTYsImV4cCI6MjA2MTE4NDI5Nn0.3tAABhmx7rWIkdpgxVK2KB9LKIJZYOPD_O6AVJ1DnIc"
