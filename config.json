@@ -1,6 +1,11 @@
 {
     "supabase_projects": [
         {
+            "name": "Multi Project Supabase",
+            "url": "https://qcqmbnfmybdlgzegzzxc.supabase.co",
+            "anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjcW1ibmZteWJkbGd6ZWd6enhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1ODg3MzgsImV4cCI6MjA2MTE2NDczOH0.WPHXr-fmQpnKvONEJ9NPjUC7czYGKdu1yC3ko4Q1YQE"
+        },
+        {
             "name": "DDC Staff Directory",
             "url": "https://pkuontfmhkqiukpwscbg.supabase.co",
             "anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrdW9udGZtaGtxaXVrcHdzY2JnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyMDQyNjksImV4cCI6MjA1OTc4MDI2OX0.m1MCpn2d6HUigCnHSPtb5GAA_20i02MIcsiz4EZJvt0"
