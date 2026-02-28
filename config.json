@@ -1,0 +1,60 @@
+{
+    "supabase_projects": [
+        {
+            "name": "Multi Project Supabase",
+            "url": "https://qcqmbnfmybdlgzegzzxc.supabase.co",
+            "anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFjcW1ibmZteWJkbGd6ZWd6enhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU1ODg3MzgsImV4cCI6MjA2MTE2NDczOH0.WPHXr-fmQpnKvONEJ9NPjUC7czYGKdu1yC3ko4Q1YQE"
+        },
+        {
+            "name": "DDC Staff Directory",
+            "url": "https://pkuontfmhkqiukpwscbg.supabase.co",
+            "anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrdW9udGZtaGtxaXVrcHdzY2JnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyMDQyNjksImV4cCI6MjA1OTc4MDI2OX0.m1MCpn2d6HUigCnHSPtb5GAA_20i02MIcsiz4EZJvt0"
+        },
+        {
+            "name": "Sofaspartan Media Player Comments Platform",
+            "url": "https://tdgatkfrfaejitdafeas.supabase.co",
+            "anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InRkZ2F0a2ZyZmFlaml0ZGFmZWFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDU2MDgyOTYsImV4cCI6MjA2MTE4NDI5Nn0.3tAABhmx7rWIkdpgxVK2KB9LKIJZYOPD_O6AVJ1DnIc"
+        },
+        {
+            "name": "Sherman Creative Portfolio",
+            "url": "https://psjpoqoqslswjnovpnrx.supabase.co",
+            "anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBzanBvcW9xc2xzd2pub3ZwbnJ4Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM2OTAzMzYsImV4cCI6MjA1OTI2NjMzNn0.rQYUUW60c8VFWnEvld_XqTnWmYdacsFhlnlts7GFMGY"
+        },
+        {
+            "name": "MapFlow",
+            "url": "https://gvodxlxaqfobumwsfflh.supabase.co",
+            "anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imd2b2R4bHhhcWZvYnVtd3NmZmxoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDM3Mzc0MDcsImV4cCI6MjA1OTMxMzQwN30.ceyhprl0oVg6hxzJWmALTgxcRPQvx8C3mqrFvOwzDCQ"
+        },
+        {
+            "name": "PlayShelf",
+            "url": "https://jmrdslfglptsfydcmhgr.supabase.co",
+            "anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImptcmRzbGZnbHB0c2Z5ZGNtaGdyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI1MTc3NzAsImV4cCI6MjA1ODA5Mzc3MH0.8WoB7v6RyU3OnBmMpgkIg35BIhIE6I42FHHw2P0HB_4"
+        },
+        {
+            "name": "Rich Link Sharing Platform",
+            "url": "https://jymnryphuqmwknkuaqyg.supabase.co",
+            "anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Imp5bW5yeXBodXFtd2tua3VhcXlnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI0OTA3MDIsImV4cCI6MjA1ODA2NjcwMn0.pU4gr-D_yQfJV3dqXMs9N8pJ-rgRwsWQ5rU2dVg_nSM"
+        },
+        {
+            "name": "Brand Management Platform",
+            "url": "https://dxafzialnuxcqrmfkggy.supabase.co",
+            "anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR4YWZ6aWFsbnV4Y3FybWZrZ2d5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDI1ODYwNzUsImV4cCI6MjA1ODE2MjA3NX0.OHjXMt-hgpD_qSpMl_3OIDMgtzLqOE9hbF6cB0G_pZg"
+        },
+        {
+            "name": "DDC Creative Team Dashboard",
+            "url": "https://etjrnxkdjvvdvlkbxxal.supabase.co",
+            "anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV0anJueGtkanZ2ZHZsa2J4eGFsIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQxMzY1NTgsImV4cCI6MjA1OTcxMjU1OH0.9_3N2my0o3bUeNEy-cPVs6NBw83LsfsnS9OM0u-ruGo"
+        },
+        {
+            "name": "DDC Employee Portal",
+            "url": "https://pkuontfmhkqiukpwscbg.supabase.co",
+            "anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InBrdW9udGZtaGtxaXVrcHdzY2JnIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQyMDQyNjksImV4cCI6MjA1OTc4MDI2OX0.m1MCpn2d6HUigCnHSPtb5GAA_20i02MIcsiz4EZJvt0"
+        },
+        {
+            "name": "Stepwise",
+            "url": "https://dtjwhchgvdhvjlaksfdm.supabase.co",
+            "anon_key": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR0andoY2hndmRodmpsYWtzZmRtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDQ4NTAwNTAsImV4cCI6MjA2MDQyNjA1MH0.TjSWtZZ03L2RIr1dPCzHtJacR7SasVkv13SDkNdtydw"
+        }
+    ],
+    "ping_interval_minutes": 15
+} 
