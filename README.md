@@ -1,6 +1,6 @@
 # Supabase Project Pinger
 
-A GitHub Actions-based tool that automatically pings multiple Supabase projects every 5 minutes to prevent them from going to sleep.
+A GitHub Actions-based tool that automatically pings multiple Supabase projects every 15 minutes to prevent them from going to sleep.
 
 ## Features
 
@@ -28,4 +28,4 @@ A GitHub Actions-based tool that automatically pings multiple Supabase projects 
 
 ## Manual Trigger
 
-You can manually trigger the pinger from the GitHub Actions tab in your repository. 
+You can manually trigger the pinger from the GitHub Actions tab in your repository.

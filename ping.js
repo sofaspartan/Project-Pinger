@@ -78,4 +78,4 @@ async function pingProjects() {
   }
 }
 
-pingProjects(); 
+pingProjects();
