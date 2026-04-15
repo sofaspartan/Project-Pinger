@@ -803,6 +803,91 @@
             return `${diffInYears} year${diffInYears === 1 ? '' : 's'} ago`;
         }
 
+        /** Strip GitHub Actions log line prefixes like 2025-04-14T12:00:00.1234567Z  */
+        function stripJobLogTimestamps(logsText) {
+            return logsText
+                .split('\n')
+                .map((line) => line.replace(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(\.\d+)?Z\s+/, ''))
+                .join('\n');
+        }
+
+        /** From job index i, extract one balanced JSON object or array (respects strings). */
+        function extractBalancedJsonSlice(s, i) {
+            const c0 = s[i];
+            if (c0 !== '{' && c0 !== '[') return null;
+            const stack = [];
+            let inString = false;
+            let quote = '';
+            let escape = false;
+            for (let j = i; j < s.length; j++) {
+                const c = s[j];
+                if (inString) {
+                    if (escape) {
+                        escape = false;
+                        continue;
+                    }
+                    if (c === '\\') {
+                        escape = true;
+                        continue;
+                    }
+                    if (c === quote) {
+                        inString = false;
+                        quote = '';
+                    }
+                    continue;
+                }
+                if (c === '"') {
+                    inString = true;
+                    quote = '"';
+                    continue;
+                }
+                if (c === '{') {
+                    stack.push('}');
+                    continue;
+                }
+                if (c === '[') {
+                    stack.push(']');
+                    continue;
+                }
+                if (c === '}' || c === ']') {
+                    if (!stack.length) return null;
+                    const want = stack.pop();
+                    if (c !== want) return null;
+                    if (!stack.length) return s.slice(i, j + 1);
+                }
+            }
+            return null;
+        }
+
+        /**
+         * ping.js prints { timestamp, results } after "Results:"; older logs used a raw array.
+         */
+        function extractPingResultsFromJobLog(logsText) {
+            const cleaned = stripJobLogTimestamps(logsText);
+            const marker = 'Results:';
+            const idx = cleaned.indexOf(marker);
+            if (idx === -1) return null;
+            let pos = idx + marker.length;
+            while (pos < cleaned.length && /[\s\r\n]/.test(cleaned[pos])) pos++;
+            const brace = cleaned.indexOf('{', pos);
+            const bracket = cleaned.indexOf('[', pos);
+            let start = -1;
+            if (brace === -1) start = bracket;
+            else if (bracket === -1) start = brace;
+            else start = Math.min(brace, bracket);
+            if (start === -1) return null;
+            const jsonSlice = extractBalancedJsonSlice(cleaned, start);
+            if (!jsonSlice) return null;
+            try {
+                const parsed = JSON.parse(jsonSlice);
+                if (Array.isArray(parsed)) return parsed;
+                if (parsed && Array.isArray(parsed.results)) return parsed.results;
+            } catch (e) {
+                console.error('extractPingResultsFromJobLog JSON.parse:', e);
+            }
+            return null;
+        }
+
         let currentPage = 1;
         const entriesPerPage = 4;
         let allRuns = [];
@@ -837,27 +922,12 @@
                             // Get the job's logs
                             const logsResponse = await fetch(`/api/github?jobId=${job.id}`);
                             const logsText = await logsResponse.text();
-                            
-                            // Parse the logs to find the JSON results
-                            const jsonMatch = logsText.match(/Results: (\[[\s\S]*?\])/);
-                            if (jsonMatch) {
-                                try {
-                                    // Clean up the JSON string
-                                    const jsonStr = jsonMatch[1]
-                                        .split('\n')  // Split into lines
-                                        .map(line => line.replace(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d+Z\s+/, ''))  // Remove timestamps
-                                        .join('')  // Join back together
-                                        .replace(/\s+/g, ' '); // Replace multiple spaces with single space
-                                    
-                                    console.log('Attempting to parse JSON:', jsonStr);
-                                    const resultsData = JSON.parse(jsonStr);
-                                    run.results = resultsData;
-                                } catch (e) {
-                                    console.error('Error parsing results JSON:', e);
-                                    console.error('Raw JSON string:', jsonMatch[1]);
-                                }
+
+                            const resultsArray = extractPingResultsFromJobLog(logsText);
+                            if (resultsArray) {
+                                run.results = resultsArray;
                             } else {
-                                console.log('No JSON results found in logs');
+                                console.log('No JSON results found in logs for run', run.id);
                             }
                         }
                     } catch (error) {
