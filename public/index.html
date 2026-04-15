@@ -912,22 +912,27 @@
                 // Fetch artifacts for each run
                 const runsWithResults = await Promise.all(data.workflow_runs.map(async (run) => {
                     try {
-                        // First, get the run's jobs to get the job ID
+                        const artRes = await fetch(`/api/github?runId=${run.id}&pingResults=1`);
+                        if (artRes.ok) {
+                            const artBody = await artRes.json();
+                            if (artBody.results && Array.isArray(artBody.results)) {
+                                run.results = artBody.results;
+                                return run;
+                            }
+                        }
+
                         const jobsResponse = await fetch(`/api/github?runId=${run.id}`);
                         const jobsData = await jobsResponse.json();
-                        
+
                         if (jobsData.jobs && jobsData.jobs.length > 0) {
-                            const job = jobsData.jobs[0]; // Get the first job
-                            
-                            // Get the job's logs
+                            const job = jobsData.jobs[0];
                             const logsResponse = await fetch(`/api/github?jobId=${job.id}`);
                             const logsText = await logsResponse.text();
-
                             const resultsArray = extractPingResultsFromJobLog(logsText);
                             if (resultsArray) {
                                 run.results = resultsArray;
                             } else {
-                                console.log('No JSON results found in logs for run', run.id);
+                                console.log('No JSON from artifact or logs for run', run.id);
                             }
                         }
                     } catch (error) {

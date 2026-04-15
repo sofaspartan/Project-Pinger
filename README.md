@@ -54,7 +54,7 @@ In the Vercel project: **Settings → Environment Variables**. Add for **Product
 | Name | Value |
 |------|--------|
 | `PINGER_CONFIG_JSON` | Same JSON string as the GitHub secret: full `config` object with `supabase_projects` and each project’s `url` + `secret_key` (or `service_role_key`). |
-| `GITHUB_TOKEN` | A GitHub [personal access token](https://github.com/settings/tokens) with **`actions:read`** (and **`repo`** scope if you use a classic PAT on a private repo). Needed for the **GitHub** tab and job logs. |
+| `GITHUB_TOKEN` | A GitHub [personal access token](https://github.com/settings/tokens) with **`actions:read`** (and **`repo`** scope if you use a classic PAT on a private repo). Needed for the **GitHub** tab, workflow list, **ping-results artifacts** (ZIP), and job logs. |
 
 Redeploy after saving env vars (**Deployments → … → Redeploy** or push an empty commit).
 
