@@ -10,6 +10,8 @@ function githubHeaders() {
   };
 }
 
+const PING_WORKFLOW_PATH = '.github/workflows/ping.yml';
+
 async function fetchPingResultsFromArtifact(runId) {
   const listRes = await axios.get(
     `https://api.github.com/repos/${REPO}/actions/runs/${runId}/artifacts`,
@@ -48,6 +50,41 @@ async function fetchPingResultsFromArtifact(runId) {
   return null;
 }
 
+function ratioFromResults(results) {
+  if (!results || !results.length) return null;
+  const ok = results.filter((p) => p.status === 'success').length;
+  return Math.round((ok / results.length) * 1000) / 1000;
+}
+
+async function buildSparklineRatios(limit) {
+  const cap = Math.min(Math.max(limit, 4), 10);
+  const runsRes = await axios.get(
+    `https://api.github.com/repos/${REPO}/actions/runs?per_page=${Math.min(cap * 2, 30)}`,
+    { headers: githubHeaders() }
+  );
+  const allRuns = runsRes.data.workflow_runs || [];
+  const pingRuns = allRuns
+    .filter(
+      (r) =>
+        r.path === PING_WORKFLOW_PATH ||
+        r.name === 'Supabase Project Pinger'
+    )
+    .slice(0, cap);
+
+  const ratios = await Promise.all(
+    pingRuns.map(async (run) => {
+      try {
+        const results = await fetchPingResultsFromArtifact(run.id);
+        return ratioFromResults(results);
+      } catch (e) {
+        return null;
+      }
+    })
+  );
+
+  return { points: ratios.reverse(), usedRuns: pingRuns.length };
+}
+
 module.exports = async (req, res) => {
   try {
     res.setHeader('Access-Control-Allow-Credentials', true);
@@ -68,7 +105,7 @@ module.exports = async (req, res) => {
       return;
     }
 
-    const { runId, jobId, pingResults } = req.query;
+    const { runId, jobId, pingResults, sparkline } = req.query;
     let data;
 
     if (jobId) {
@@ -90,6 +127,13 @@ module.exports = async (req, res) => {
         return;
       }
       res.status(200).json({ results });
+      return;
+    } else if (sparkline != null && String(sparkline) !== '') {
+      const limit = parseInt(req.query.limit, 10);
+      const { points, usedRuns } = await buildSparklineRatios(
+        Number.isFinite(limit) && limit > 0 ? limit : 10
+      );
+      res.status(200).json({ points, usedRuns });
       return;
     } else if (runId) {
       const response = await axios.get(

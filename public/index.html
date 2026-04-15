@@ -243,6 +243,91 @@
             color: var(--error-color);
         }
 
+        .hero-card {
+            margin-bottom: 24px;
+            padding: 22px 24px;
+            border-radius: var(--border-radius);
+            background: linear-gradient(135deg, #f6fffb 0%, #f0f7ff 100%);
+            border: 1px solid #d9e8e0;
+            box-shadow: var(--shadow);
+        }
+
+        .hero-card-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 24px;
+            align-items: stretch;
+            justify-content: space-between;
+        }
+
+        .hero-summary {
+            flex: 0 0 auto;
+            min-width: 160px;
+        }
+
+        .hero-summary-label {
+            font-size: 0.85em;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-weight: 600;
+        }
+
+        .hero-summary-value {
+            font-size: 2.4em;
+            font-weight: 700;
+            color: var(--primary-dark);
+            line-height: 1.1;
+            margin-top: 6px;
+        }
+
+        .hero-summary-note {
+            margin-top: 8px;
+            font-size: 0.95em;
+            color: #475569;
+        }
+
+        .hero-sparkline-block {
+            flex: 1 1 220px;
+            min-width: 200px;
+        }
+
+        .hero-sparkline-label {
+            font-size: 0.85em;
+            color: #64748b;
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .hero-sparkline-axes {
+            font-weight: 400;
+            color: #94a3b8;
+            font-size: 0.85em;
+        }
+
+        .hero-sparkline-svg {
+            width: 100%;
+            max-width: 100%;
+            height: 56px;
+            display: block;
+        }
+
+        .hero-sparkline-status {
+            font-size: 0.8em;
+            color: #94a3b8;
+            margin-top: 6px;
+        }
+
+        .ping-cooldown-hint {
+            width: 100%;
+            max-width: 300px;
+            margin-top: 8px;
+            font-size: 0.85em;
+            color: rgba(255, 255, 255, 0.95);
+            text-align: center;
+            min-height: 1.2em;
+        }
+
         @media (max-width: 768px) {
             .header {
                 flex-direction: column;
@@ -601,10 +686,13 @@
                 </h1>
                 <div class="header-subtitle">Monitors and keeps Ethan's Supabase projects alive</div>
             </div>
-            <button class="refresh-button" onclick="fetchStatus()" id="refreshButton">
-                <span id="buttonText">Ping All Projects</span>
-                <span id="loadingSpinner" class="loading" style="display: none;"></span>
-            </button>
+            <div style="display: flex; flex-direction: column; align-items: center;">
+                <button type="button" class="refresh-button" onclick="fetchStatus(true)" id="refreshButton">
+                    <span id="buttonText">Ping All Projects</span>
+                    <span id="loadingSpinner" class="loading" style="display: none;"></span>
+                </button>
+                <div id="pingCooldownHint" class="ping-cooldown-hint" aria-live="polite"></div>
+            </div>
         </div>
 
         <div class="tabs">
@@ -614,6 +702,23 @@
         </div>
 
         <div id="current-tab" class="tab-content active">
+            <div id="hero-card" class="hero-card" hidden>
+                <div class="hero-card-row">
+                    <div class="hero-summary">
+                        <div class="hero-summary-label">Fleet health (this ping)</div>
+                        <div id="hero-summary-value" class="hero-summary-value">—</div>
+                        <div id="hero-summary-note" class="hero-summary-note"></div>
+                    </div>
+                    <div class="hero-sparkline-block">
+                        <div class="hero-sparkline-label">
+                            Last <span id="hero-sparkline-count">—</span> GitHub Actions runs
+                            <span class="hero-sparkline-axes">· older ← → newer</span>
+                        </div>
+                        <svg id="hero-sparkline-svg" class="hero-sparkline-svg" viewBox="0 0 280 52" preserveAspectRatio="none" role="img" aria-label="Share of projects healthy per workflow run"></svg>
+                        <div id="hero-sparkline-status" class="hero-sparkline-status"></div>
+                    </div>
+                </div>
+            </div>
             <div id="projects"></div>
             <div class="status-summary">
                 <div class="last-updated" id="lastUpdated">Last ping: Never</div>
@@ -677,49 +782,194 @@
     </div>
 
     <script>
-        async function fetchStatus() {
+        const MANUAL_PING_COOLDOWN_MS = 45000;
+        const MANUAL_PING_DEBOUNCE_MS = 750;
+        let manualPingCooldownUntil = 0;
+        let lastManualPingAttempt = 0;
+        let manualCooldownTimer = null;
+        let statusAutoRefreshCount = 0;
+
+        function clearManualCooldownTimer() {
+            if (manualCooldownTimer) {
+                clearInterval(manualCooldownTimer);
+                manualCooldownTimer = null;
+            }
+        }
+
+        function startManualPingCooldown() {
+            manualPingCooldownUntil = Date.now() + MANUAL_PING_COOLDOWN_MS;
+            const button = document.getElementById('refreshButton');
+            const buttonText = document.getElementById('buttonText');
+            const hint = document.getElementById('pingCooldownHint');
+            clearManualCooldownTimer();
+            const tick = () => {
+                const left = Math.ceil((manualPingCooldownUntil - Date.now()) / 1000);
+                if (left > 0) {
+                    button.disabled = true;
+                    buttonText.textContent = `Wait ${left}s`;
+                    hint.textContent = `Manual ping limited to once every ${MANUAL_PING_COOLDOWN_MS / 1000}s.`;
+                } else {
+                    clearManualCooldownTimer();
+                    button.disabled = false;
+                    buttonText.textContent = 'Ping All Projects';
+                    hint.textContent = '';
+                }
+            };
+            tick();
+            manualCooldownTimer = setInterval(tick, 500);
+        }
+
+        function updateHeroFromResults(results) {
+            const hero = document.getElementById('hero-card');
+            const val = document.getElementById('hero-summary-value');
+            const note = document.getElementById('hero-summary-note');
+            if (!results || !results.length) {
+                hero.hidden = true;
+                return;
+            }
+            const ok = results.filter((p) => p.status === 'success').length;
+            const total = results.length;
+            val.textContent = `${ok} / ${total}`;
+            if (ok === total) {
+                note.textContent = 'All projects reported success on this ping.';
+            } else {
+                note.textContent = `${total - ok} project(s) need attention.`;
+            }
+            hero.hidden = false;
+        }
+
+        function paintSparkline(points, usedRuns) {
+            const svg = document.getElementById('hero-sparkline-svg');
+            const statusEl = document.getElementById('hero-sparkline-status');
+            const countEl = document.getElementById('hero-sparkline-count');
+            if (countEl) countEl.textContent = usedRuns != null ? String(usedRuns) : '—';
+
+            const W = 280;
+            const H = 52;
+            const padX = 6;
+            const padY = 7;
+            const innerW = W - padX * 2;
+            const innerH = H - padY * 2;
+            const grid = '#e2e8f0';
+
+            const defined = (points || []).filter((p) => p != null && !Number.isNaN(p));
+            if (!points || points.length < 2 || defined.length < 2) {
+                svg.innerHTML = `<text x="8" y="30" fill="#94a3b8" font-size="12" font-family="system-ui,sans-serif">Not enough workflow history yet</text>`;
+                statusEl.textContent = '';
+                return;
+            }
+
+            const n = points.length;
+            let d = '';
+            let pen = false;
+            for (let i = 0; i < n; i++) {
+                const p = points[i];
+                if (p == null) {
+                    pen = false;
+                    continue;
+                }
+                const x = padX + (i / (n - 1 || 1)) * innerW;
+                const y = padY + (1 - p) * innerH;
+                if (!pen) {
+                    d += `M${x.toFixed(1)},${y.toFixed(1)}`;
+                    pen = true;
+                } else {
+                    d += `L${x.toFixed(1)},${y.toFixed(1)}`;
+                }
+            }
+
+            const baseline = padY + innerH;
+            let bg = `<line x1="${padX}" y1="${baseline}" x2="${W - padX}" y2="${baseline}" stroke="${grid}" stroke-width="1"/>`;
+            bg += `<line x1="${padX}" y1="${padY + innerH / 2}" x2="${W - padX}" y2="${padY + innerH / 2}" stroke="${grid}" stroke-width="1" stroke-dasharray="4 4"/>`;
+
+            const fillPath = d + ` L ${padX + innerW} ${baseline} L ${padX} ${baseline} Z`;
+            svg.innerHTML =
+                `${bg}<defs><linearGradient id="sparkFill" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#3ecf8e" stop-opacity="0.28"/><stop offset="100%" stop-color="#3ecf8e" stop-opacity="0"/></linearGradient></defs>` +
+                `<path d="${fillPath}" fill="url(#sparkFill)" stroke="none" />` +
+                `<path d="${d}" fill="none" stroke="#2eb67d" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />`;
+            statusEl.textContent =
+                'Each point = fraction of projects with success on that GitHub Actions run (from ping-results artifacts).';
+        }
+
+        async function loadSparklineIntoHero() {
+            const statusEl = document.getElementById('hero-sparkline-status');
+            statusEl.textContent = 'Loading trend…';
+            try {
+                const res = await fetch('/api/github?sparkline=1&limit=10');
+                if (!res.ok) throw new Error('GitHub trend request failed');
+                const body = await res.json();
+                paintSparkline(body.points || [], body.usedRuns);
+            } catch (e) {
+                console.warn('Sparkline:', e);
+                document.getElementById('hero-sparkline-svg').innerHTML =
+                    '<text x="8" y="30" fill="#94a3b8" font-size="12">Trend unavailable (check GITHUB_TOKEN)</text>';
+                statusEl.textContent = '';
+            }
+        }
+
+        async function fetchStatus(isManual) {
             const button = document.getElementById('refreshButton');
             const buttonText = document.getElementById('buttonText');
             const spinner = document.getElementById('loadingSpinner');
-            
-            button.disabled = true;
-            buttonText.textContent = 'Pinging...';
-            spinner.style.display = 'inline-block';
+            const hint = document.getElementById('pingCooldownHint');
 
-            // Show loading state in projects container
+            if (isManual) {
+                const now = Date.now();
+                if (now < manualPingCooldownUntil) {
+                    const s = Math.ceil((manualPingCooldownUntil - now) / 1000);
+                    hint.textContent = `Please wait ${s}s before another manual ping.`;
+                    return;
+                }
+                if (now - lastManualPingAttempt < MANUAL_PING_DEBOUNCE_MS) {
+                    return;
+                }
+                lastManualPingAttempt = now;
+                hint.textContent = '';
+            }
+
+            if (isManual) {
+                button.disabled = true;
+                buttonText.textContent = 'Pinging...';
+                spinner.style.display = 'inline-block';
+            } else {
+                spinner.style.display = 'none';
+            }
+
             document.getElementById('projects').innerHTML = `
                 <div class="loading-container">
                     <div class="loading"></div>
                     <div class="loading-text">Pinging all projects...</div>
                 </div>
             `;
-            
+
+            let pingApiSucceeded = false;
             try {
                 const response = await fetch('/api/ping');
                 const data = await response.json();
-                
+
                 if (!data.success) {
                     throw new Error(data.error || 'Unknown error occurred');
                 }
-                
+                pingApiSucceeded = true;
+
                 const projectsDiv = document.getElementById('projects');
                 projectsDiv.innerHTML = '';
-                
-                data.results.forEach(project => {
+
+                data.results.forEach((project) => {
                     const projectDiv = document.createElement('div');
                     projectDiv.className = `project ${project.status}`;
-                    
+
                     const projectHeader = document.createElement('div');
                     projectHeader.className = 'project-header';
-                    
+
                     const nameSpan = document.createElement('span');
                     nameSpan.className = 'project-name';
                     nameSpan.textContent = project.name;
-                    
+
                     const statusSpan = document.createElement('span');
                     statusSpan.className = 'status';
                     statusSpan.textContent = project.status.toUpperCase();
-                    
+
                     projectHeader.appendChild(nameSpan);
                     projectHeader.appendChild(statusSpan);
                     projectDiv.appendChild(projectHeader);
@@ -736,22 +986,29 @@
                         `;
                     }
                     projectDiv.appendChild(detailsDiv);
-                    
+
                     if (project.error) {
                         const errorDiv = document.createElement('div');
                         errorDiv.className = 'error-details';
                         errorDiv.textContent = `Error: ${project.error}\nDetails: ${JSON.stringify(project.details, null, 2)}`;
                         projectDiv.appendChild(errorDiv);
                     }
-                    
+
                     projectsDiv.appendChild(projectDiv);
                 });
-                
+
+                updateHeroFromResults(data.results);
+
                 const lastPingTime = new Date(data.timestamp);
                 document.getElementById('lastUpdated').textContent = `Last ping: ${lastPingTime.toLocaleString()}`;
-                
+
                 const nextPingTime = new Date(lastPingTime.getTime() + 15 * 60 * 1000);
                 document.getElementById('nextPing').textContent = `Next scheduled ping: ${nextPingTime.toLocaleString()}`;
+
+                statusAutoRefreshCount += 1;
+                if (isManual || statusAutoRefreshCount === 1 || statusAutoRefreshCount % 5 === 0) {
+                    loadSparklineIntoHero();
+                }
             } catch (error) {
                 console.error('Error fetching status:', error);
                 const projectsDiv = document.getElementById('projects');
@@ -764,10 +1021,22 @@
                         <div class="error-details">${error.message}</div>
                     </div>
                 `;
+                document.getElementById('hero-card').hidden = true;
             } finally {
-                button.disabled = false;
-                buttonText.textContent = 'Ping All Projects';
                 spinner.style.display = 'none';
+                if (isManual) {
+                    if (pingApiSucceeded) {
+                        startManualPingCooldown();
+                    } else if (Date.now() >= manualPingCooldownUntil) {
+                        clearManualCooldownTimer();
+                        button.disabled = false;
+                        buttonText.textContent = 'Ping All Projects';
+                    }
+                } else if (Date.now() >= manualPingCooldownUntil) {
+                    clearManualCooldownTimer();
+                    button.disabled = false;
+                    buttonText.textContent = 'Ping All Projects';
+                }
             }
         }
 
@@ -1092,10 +1361,10 @@
         }
 
         // Initial load
-        fetchStatus();
+        fetchStatus(false);
         
         // Refresh status every minute
-        setInterval(fetchStatus, 60 * 1000);
+        setInterval(() => fetchStatus(false), 60 * 1000);
     </script>
 </body>
 </html> 

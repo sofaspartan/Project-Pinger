@@ -41,6 +41,7 @@ It calls:
 
 - **`GET /api/ping`** — runs the same Supabase pings as `ping.js` (uses `PINGER_CONFIG_JSON` on the server).
 - **`GET /api/github`** — reads GitHub Actions history for this repo (uses `GITHUB_TOKEN`).
+- **`GET /api/github?sparkline=1&limit=10`** — returns `{ points, usedRuns }` for the status hero (fraction healthy per recent `ping.yml` run, from artifacts).
 
 ### Deploy
 
