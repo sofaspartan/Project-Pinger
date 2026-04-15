@@ -318,6 +318,43 @@
             margin-top: 6px;
         }
 
+        .hero-schedule-row {
+            margin-top: 20px;
+            padding-top: 18px;
+            border-top: 1px solid rgba(100, 148, 176, 0.25);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px 32px;
+            align-items: flex-start;
+        }
+
+        .hero-schedule-item {
+            flex: 1 1 200px;
+            min-width: 160px;
+        }
+
+        .hero-schedule-label {
+            font-size: 0.8em;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            font-weight: 600;
+            margin-bottom: 6px;
+        }
+
+        .hero-schedule-primary {
+            font-size: 1.35em;
+            font-weight: 700;
+            color: #1e293b;
+            line-height: 1.25;
+        }
+
+        .hero-schedule-sub {
+            margin-top: 4px;
+            font-size: 0.85em;
+            color: #64748b;
+        }
+
         .ping-cooldown-hint {
             width: 100%;
             max-width: 300px;
@@ -718,6 +755,18 @@
                         <div id="hero-sparkline-status" class="hero-sparkline-status"></div>
                     </div>
                 </div>
+                <div class="hero-schedule-row">
+                    <div class="hero-schedule-item">
+                        <div class="hero-schedule-label">Last ping</div>
+                        <div id="hero-last-ping-relative" class="hero-schedule-primary">—</div>
+                        <div id="hero-last-ping-absolute" class="hero-schedule-sub"></div>
+                    </div>
+                    <div class="hero-schedule-item">
+                        <div class="hero-schedule-label">Next scheduled ping (est.)</div>
+                        <div id="hero-next-ping-relative" class="hero-schedule-primary">—</div>
+                        <div id="hero-next-ping-absolute" class="hero-schedule-sub"></div>
+                    </div>
+                </div>
             </div>
             <div id="projects"></div>
             <div class="status-summary">
@@ -999,11 +1048,7 @@
 
                 updateHeroFromResults(data.results);
 
-                const lastPingTime = new Date(data.timestamp);
-                document.getElementById('lastUpdated').textContent = `Last ping: ${lastPingTime.toLocaleString()}`;
-
-                const nextPingTime = new Date(lastPingTime.getTime() + 15 * 60 * 1000);
-                document.getElementById('nextPing').textContent = `Next scheduled ping: ${nextPingTime.toLocaleString()}`;
+                applyPingScheduleTimes(data.timestamp);
 
                 statusAutoRefreshCount += 1;
                 if (isManual || statusAutoRefreshCount === 1 || statusAutoRefreshCount % 5 === 0) {
@@ -1022,6 +1067,11 @@
                     </div>
                 `;
                 document.getElementById('hero-card').hidden = true;
+                lastPingScheduleAt = null;
+                nextPingScheduleAt = null;
+                document.getElementById('lastUpdated').textContent = 'Last ping: unavailable';
+                document.getElementById('nextPing').textContent =
+                    'Next scheduled ping: unknown until a successful ping';
             } finally {
                 spinner.style.display = 'none';
                 if (isManual) {
@@ -1070,6 +1120,63 @@
             
             const diffInYears = Math.floor(diffInMonths / 12);
             return `${diffInYears} year${diffInYears === 1 ? '' : 's'} ago`;
+        }
+
+        const PING_CADENCE_MS = 15 * 60 * 1000;
+        let lastPingScheduleAt = null;
+        let nextPingScheduleAt = null;
+
+        function getRelativeTimeUntil(date) {
+            const now = new Date();
+            const diffInSeconds = Math.floor((date - now) / 1000);
+            if (diffInSeconds <= 0) {
+                return 'due now (GitHub runs on a cron window)';
+            }
+            if (diffInSeconds < 60) {
+                return `in ${diffInSeconds} second${diffInSeconds === 1 ? '' : 's'}`;
+            }
+            const diffInMinutes = Math.floor(diffInSeconds / 60);
+            if (diffInMinutes < 60) {
+                return `in ${diffInMinutes} minute${diffInMinutes === 1 ? '' : 's'}`;
+            }
+            const diffInHours = Math.floor(diffInMinutes / 60);
+            if (diffInHours < 48) {
+                return `in ${diffInHours} hour${diffInHours === 1 ? '' : 's'}`;
+            }
+            const diffInDays = Math.floor(diffInHours / 24);
+            return `in ${diffInDays} day${diffInDays === 1 ? '' : 's'}`;
+        }
+
+        function refreshPingScheduleDisplay() {
+            const last = lastPingScheduleAt;
+            const next = nextPingScheduleAt;
+            if (!last || !next) return;
+
+            const lastRel = document.getElementById('hero-last-ping-relative');
+            const lastAbs = document.getElementById('hero-last-ping-absolute');
+            const nextRel = document.getElementById('hero-next-ping-relative');
+            const nextAbs = document.getElementById('hero-next-ping-absolute');
+            if (!lastRel || !nextRel) return;
+
+            lastRel.textContent = getRelativeTimeString(last);
+            lastAbs.textContent = last.toLocaleString();
+            nextRel.textContent = getRelativeTimeUntil(next);
+            nextAbs.textContent = next.toLocaleString();
+
+            const lastUpdatedEl = document.getElementById('lastUpdated');
+            const nextPingEl = document.getElementById('nextPing');
+            if (lastUpdatedEl) {
+                lastUpdatedEl.textContent = `Last ping: ${getRelativeTimeString(last)}`;
+            }
+            if (nextPingEl) {
+                nextPingEl.textContent = `Next scheduled ping: ${getRelativeTimeUntil(next)} · ~every 15 min on GitHub Actions`;
+            }
+        }
+
+        function applyPingScheduleTimes(lastPingTime) {
+            lastPingScheduleAt = new Date(lastPingTime);
+            nextPingScheduleAt = new Date(lastPingTime.getTime() + PING_CADENCE_MS);
+            refreshPingScheduleDisplay();
         }
 
         /** Strip GitHub Actions log line prefixes like 2025-04-14T12:00:00.1234567Z  */
@@ -1362,9 +1469,9 @@
 
         // Initial load
         fetchStatus(false);
-        
-        // Refresh status every minute
+
         setInterval(() => fetchStatus(false), 60 * 1000);
+        setInterval(() => refreshPingScheduleDisplay(), 30 * 1000);
     </script>
 </body>
 </html> 
