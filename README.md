@@ -35,7 +35,9 @@ You can manually trigger the pinger from the GitHub Actions tab in your reposito
 
 ## Vercel dashboard (status UI)
 
-The **front-end status page** is `public/index.html`. After deploy, open your Vercel **production URL** (root `/`). It calls:
+The **front-end status page** is `public/index.html`. After deploy, open your Vercel **production URL** (root `/`). Vercel serves files from `public/` at the site root and **`api/` as `/api/*`**; do not add a catch-all rewrite to `/public/` or `/api/ping` will not run.
+
+It calls:
 
 - **`GET /api/ping`** — runs the same Supabase pings as `ping.js` (uses `PINGER_CONFIG_JSON` on the server).
 - **`GET /api/github`** — reads GitHub Actions history for this repo (uses `GITHUB_TOKEN`).
