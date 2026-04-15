@@ -61,6 +61,44 @@
             border-left: 4px solid var(--error-color);
         }
 
+        .project.unknown {
+            border-left: 4px solid #f59e0b;
+        }
+
+        .unknown .status {
+            color: #b45309;
+            background-color: rgba(245, 158, 11, 0.12);
+        }
+
+        .project-status-icon {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+        }
+
+        .project-status-icon svg {
+            display: block;
+        }
+
+        .project.success .project-status-icon {
+            background: rgba(62, 207, 142, 0.14);
+            color: var(--primary-dark);
+        }
+
+        .project.error .project-status-icon {
+            background: rgba(255, 77, 79, 0.12);
+            color: #dc2626;
+        }
+
+        .project.unknown .project-status-icon {
+            background: rgba(245, 158, 11, 0.14);
+            color: #b45309;
+        }
+
         .status {
             font-weight: 700;
             padding: 4px 8px;
@@ -208,13 +246,15 @@
             display: flex;
             align-items: center;
             margin-bottom: 10px;
-            gap: 10px;
+            gap: 12px;
             position: relative;
         }
 
         .project-name {
             font-weight: 500;
             font-size: 1.1em;
+            flex: 1;
+            min-width: 0;
         }
 
         .response-details {
@@ -345,6 +385,20 @@
             color: #94a3b8;
             margin-top: 4px;
             line-height: 1.35;
+        }
+
+        .hero-trend-axis {
+            display: inline-flex;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 4px 6px;
+            vertical-align: middle;
+        }
+
+        .hero-trend-axis svg {
+            display: inline-block;
+            vertical-align: -2px;
+            color: #94a3b8;
         }
 
         .hero-panel-stat {
@@ -686,6 +740,11 @@
             color: var(--error-color);
         }
 
+        .project-status-badge.unknown {
+            background-color: rgba(245, 158, 11, 0.12);
+            color: #b45309;
+        }
+
         .project-status-details {
             font-size: 0.9em;
             color: #666;
@@ -739,16 +798,26 @@
             display: none;
         }
 
-        .about-acc-item > summary::after {
-            content: '▾';
-            font-size: 0.65em;
+        .about-acc-summary-label {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .about-acc-chevron {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             color: #64748b;
             transition: transform 0.2s ease;
             flex-shrink: 0;
         }
 
-        .about-acc-item[open] > summary::after {
-            transform: rotate(-180deg);
+        .about-acc-item[open] > summary .about-acc-chevron {
+            transform: rotate(180deg);
+        }
+
+        .about-acc-item > summary:hover .about-acc-chevron {
+            color: var(--primary-dark);
         }
 
         .about-acc-item > summary:hover {
@@ -875,7 +944,13 @@
                                     <span class="hero-panel-title">Run history trend</span>
                                 </div>
                                 <div class="hero-panel-meta">
-                                    Last <span id="hero-sparkline-count">—</span> GitHub Actions runs · older <span aria-hidden="true">←</span> to <span aria-hidden="true">→</span> newer
+                                    Last <span id="hero-sparkline-count">—</span> GitHub Actions runs ·
+                                    <span class="hero-trend-axis" aria-hidden="true">
+                                        older
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+                                        newer
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -933,7 +1008,7 @@
         <div id="about-tab" class="tab-content">
             <div class="about-acc" role="region" aria-label="About Supabase Project Pinger">
                 <details class="about-acc-item" open>
-                    <summary>Overview</summary>
+                    <summary><span class="about-acc-summary-label">Overview</span><span class="about-acc-chevron" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></summary>
                     <div class="about-acc-body">
                         <p>
                             Supabase Project Pinger keeps your Supabase projects exercised on a schedule so they stay responsive and easier to debug at a glance.
@@ -945,7 +1020,7 @@
                 </details>
 
                 <details class="about-acc-item">
-                    <summary>What you get</summary>
+                    <summary><span class="about-acc-summary-label">What you get</span><span class="about-acc-chevron" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></summary>
                     <div class="about-acc-body">
                         <p class="about-lead">The dashboard and workflow provide:</p>
                         <ul>
@@ -958,7 +1033,7 @@
                 </details>
 
                 <details class="about-acc-item">
-                    <summary>How it runs</summary>
+                    <summary><span class="about-acc-summary-label">How it runs</span><span class="about-acc-chevron" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></summary>
                     <div class="about-acc-body">
                         <p>
                             A workflow on GitHub installs dependencies, loads your configuration from secrets, runs the Node pinger, uploads <code>ping-results.json</code> as an artifact, and can be triggered on a cron, on push, or by hand.
@@ -970,7 +1045,7 @@
                 </details>
 
                 <details class="about-acc-item">
-                    <summary>Reading status checks</summary>
+                    <summary><span class="about-acc-summary-label">Reading status checks</span><span class="about-acc-chevron" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></summary>
                     <div class="about-acc-body">
                         <p>
                             <strong>REST layer.</strong> A <code>200</code> from the REST entrypoint means PostgREST answered for that project with the credentials you configured—your edge URL and API surface are up.
@@ -989,7 +1064,7 @@
                 </details>
 
                 <details class="about-acc-item">
-                    <summary>Why use a pinger</summary>
+                    <summary><span class="about-acc-summary-label">Why use a pinger</span><span class="about-acc-chevron" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></summary>
                     <div class="about-acc-body">
                         <p>
                             Small demos and side projects often sit idle; periodic traffic reduces “first load after silence” surprises, gives you an early warning when keys or endpoints break, and pairs with Row Level Security so publishable-style keys stay appropriate for what the checks touch.
@@ -998,7 +1073,7 @@
                 </details>
 
                 <details class="about-acc-item">
-                    <summary>Technology</summary>
+                    <summary><span class="about-acc-summary-label">Technology</span><span class="about-acc-chevron" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg></span></summary>
                     <div class="about-acc-body">
                         <p class="about-lead">Primary stack:</p>
                         <ul>
@@ -1014,6 +1089,18 @@
     </div>
 
     <script>
+        /** Lucide-style stroke icons (inline SVG strings, fixed set). */
+        function projectStatusIconSvg(status) {
+            const s = String(status || '').toLowerCase();
+            if (s === 'success') {
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>';
+            }
+            if (s === 'error') {
+                return '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>';
+            }
+            return '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>';
+        }
+
         const MANUAL_PING_COOLDOWN_MS = 45000;
         const MANUAL_PING_DEBOUNCE_MS = 750;
         let manualPingCooldownUntil = 0;
@@ -1188,11 +1275,20 @@
                 projectsDiv.innerHTML = '';
 
                 data.results.forEach((project) => {
+                    const raw = String(project.status || '').toLowerCase();
+                    const statusClass =
+                        raw === 'success' ? 'success' : raw === 'error' ? 'error' : 'unknown';
+
                     const projectDiv = document.createElement('div');
-                    projectDiv.className = `project ${project.status}`;
+                    projectDiv.className = `project ${statusClass}`;
 
                     const projectHeader = document.createElement('div');
                     projectHeader.className = 'project-header';
+
+                    const iconSpan = document.createElement('span');
+                    iconSpan.className = 'project-status-icon';
+                    iconSpan.setAttribute('aria-hidden', 'true');
+                    iconSpan.innerHTML = projectStatusIconSvg(project.status);
 
                     const nameSpan = document.createElement('span');
                     nameSpan.className = 'project-name';
@@ -1200,8 +1296,10 @@
 
                     const statusSpan = document.createElement('span');
                     statusSpan.className = 'status';
-                    statusSpan.textContent = project.status.toUpperCase();
+                    statusSpan.textContent =
+                        statusClass === 'unknown' ? 'UNKNOWN' : String(project.status).toUpperCase();
 
+                    projectHeader.appendChild(iconSpan);
                     projectHeader.appendChild(nameSpan);
                     projectHeader.appendChild(statusSpan);
                     projectDiv.appendChild(projectHeader);
@@ -1243,8 +1341,9 @@
                 projectsDiv.innerHTML = `
                     <div class="project error">
                         <div class="project-header">
-                            <span class="status">ERROR</span>
+                            <span class="project-status-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></span>
                             <span class="project-name">Failed to ping projects</span>
+                            <span class="status">ERROR</span>
                         </div>
                         <div class="error-details">${error.message}</div>
                     </div>
