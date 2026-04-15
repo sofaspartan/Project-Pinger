@@ -161,6 +161,23 @@
             box-shadow: none;
         }
 
+        .refresh-button-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            color: var(--primary-color);
+            opacity: 0.92;
+        }
+
+        .refresh-button-icon svg {
+            display: block;
+        }
+
+        .refresh-button:disabled .refresh-button-icon {
+            opacity: 0.5;
+        }
+
         .loading {
             display: inline-block;
             width: 20px;
@@ -290,6 +307,16 @@
             background: linear-gradient(160deg, #eef6f1 0%, #e8eef6 50%, #f0f4f8 100%);
             border: 1px solid #dbe4e8;
             box-shadow: var(--shadow);
+        }
+
+        .hero-card-heading {
+            margin: 0 0 14px;
+            padding: 2px 2px 0;
+            font-size: 1.2em;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: #0f172a;
+            line-height: 1.25;
         }
 
         .hero-grid {
@@ -453,6 +480,23 @@
             line-height: 1.4;
         }
 
+        .status-projects-section {
+            margin-top: 0;
+        }
+
+        .status-section-heading {
+            margin: 0 0 14px;
+            font-size: 1.12em;
+            font-weight: 700;
+            letter-spacing: -0.015em;
+            color: #0f172a;
+            line-height: 1.3;
+        }
+
+        #hero-card[hidden] + .status-projects-section {
+            margin-top: 12px;
+        }
+
         @media (max-width: 700px) {
             .hero-grid {
                 grid-template-columns: 1fr;
@@ -509,19 +553,54 @@
             display: flex;
             margin-bottom: 20px;
             border-bottom: 1px solid #e9ecef;
+            gap: 4px;
+            flex-wrap: wrap;
         }
-        
+
         .tab {
-            padding: 10px 20px;
+            padding: 10px 16px 12px;
             cursor: pointer;
             border-bottom: 2px solid transparent;
-            color: #666;
-            font-weight: 500;
+            color: #64748b;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border-radius: 8px 8px 0 0;
+            transition: color 0.15s ease, background 0.15s ease;
         }
-        
+
+        .tab .tab-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0.72;
+            color: #94a3b8;
+        }
+
+        .tab .tab-icon svg {
+            display: block;
+        }
+
+        .tab:hover {
+            color: #334155;
+            background: rgba(62, 207, 142, 0.06);
+        }
+
+        .tab:hover .tab-icon {
+            opacity: 1;
+            color: var(--primary-dark);
+        }
+
         .tab.active {
             color: var(--primary-color);
             border-bottom-color: var(--primary-color);
+            background: rgba(62, 207, 142, 0.08);
+        }
+
+        .tab.active .tab-icon {
+            opacity: 1;
+            color: var(--primary-color);
         }
         
         .tab-content {
@@ -554,14 +633,40 @@
             display: flex;
             align-items: center;
             margin-bottom: 10px;
-            gap: 10px;
+            gap: 12px;
             position: relative;
+        }
+
+        .github-run-icon {
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+        }
+
+        .github-run-icon svg {
+            display: block;
+        }
+
+        .github-run.success .github-run-icon {
+            background: rgba(62, 207, 142, 0.14);
+            color: var(--primary-dark);
+        }
+
+        .github-run.failure .github-run-icon {
+            background: rgba(255, 77, 79, 0.12);
+            color: #dc2626;
         }
 
         .github-run-title {
             font-weight: 500;
             font-size: 1.1em;
             color: var(--text-color);
+            flex: 1;
+            min-width: 0;
         }
 
         .github-run-time {
@@ -639,25 +744,31 @@
             border: none;
             color: var(--primary-color);
             cursor: pointer;
-            padding: 5px 10px;
+            padding: 8px 10px;
             font-size: 0.9em;
-            display: flex;
+            font-weight: 500;
+            display: inline-flex;
             align-items: center;
-            gap: 5px;
+            gap: 8px;
             margin-top: 10px;
+            border-radius: 6px;
         }
 
         .details-toggle:hover {
-            text-decoration: underline;
+            background: rgba(62, 207, 142, 0.08);
         }
 
-        .details-toggle-icon {
-            width: 16px;
-            height: 16px;
+        .details-toggle-chevron {
+            display: flex;
+            color: #64748b;
             transition: transform 0.2s ease;
         }
 
-        .details-toggle-icon.expanded {
+        .details-toggle-chevron svg {
+            display: block;
+        }
+
+        .details-toggle-chevron.expanded {
             transform: rotate(180deg);
         }
 
@@ -713,17 +824,51 @@
 
         .project-status-header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            gap: 10px;
             margin-bottom: 5px;
+            flex-wrap: wrap;
+        }
+
+        .project-status-icon--compact {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .project-status-icon--compact svg {
+            width: 18px;
+            height: 18px;
+        }
+
+        .project-status-icon--compact.success {
+            background: rgba(62, 207, 142, 0.14);
+            color: var(--primary-dark);
+        }
+
+        .project-status-icon--compact.error {
+            background: rgba(255, 77, 79, 0.12);
+            color: #dc2626;
+        }
+
+        .project-status-icon--compact.unknown {
+            background: rgba(245, 158, 11, 0.14);
+            color: #b45309;
         }
 
         .project-status-name {
+            flex: 1;
+            min-width: 0;
             font-weight: 500;
             color: var(--text-color);
         }
 
         .project-status-badge {
+            margin-left: auto;
             padding: 2px 6px;
             border-radius: 4px;
             font-size: 0.8em;
@@ -825,11 +970,15 @@
         }
 
         .about-acc-body {
-            padding: 0 16px 16px;
+            padding: 16px 18px 18px;
             border-top: 1px solid #eef1f4;
             font-size: 0.98em;
             line-height: 1.65;
             color: #334155;
+        }
+
+        .about-acc-body > *:first-child {
+            margin-top: 0;
         }
 
         .about-acc-body > p {
@@ -887,6 +1036,33 @@
             color: var(--text-color);
             font-size: 1.1em;
         }
+
+        .github-tab-state-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #64748b;
+        }
+
+        .github-tab-state-icon svg {
+            display: block;
+        }
+
+        .loading-container > .github-tab-state-icon {
+            margin-bottom: 6px;
+        }
+
+        .github-fetch-error {
+            display: flex;
+            gap: 14px;
+            align-items: flex-start;
+        }
+
+        .github-fetch-error .github-tab-state-icon {
+            flex-shrink: 0;
+            color: #dc2626;
+            margin-top: 2px;
+        }
     </style>
 </head>
 <body>
@@ -901,6 +1077,7 @@
             </div>
             <div style="display: flex; flex-direction: column; align-items: center;">
                 <button type="button" class="refresh-button" onclick="fetchStatus(true)" id="refreshButton">
+                    <span class="refresh-button-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg></span>
                     <span id="buttonText">Ping All Projects</span>
                     <span id="loadingSpinner" class="loading" style="display: none;"></span>
                 </button>
@@ -908,14 +1085,24 @@
             </div>
         </div>
 
-        <div class="tabs">
-            <div class="tab active" onclick="switchTab('current')">Statuses</div>
-            <div class="tab" onclick="switchTab('history')">GitHub</div>
-            <div class="tab" onclick="switchTab('about')">About</div>
+        <div class="tabs" role="tablist">
+            <div class="tab active" data-tab="current" role="tab" aria-selected="true" onclick="switchTab('current')">
+                <span class="tab-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+                <span>Statuses</span>
+            </div>
+            <div class="tab" data-tab="history" role="tab" aria-selected="false" onclick="switchTab('history')">
+                <span class="tab-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.38-5.14-.38-7.76 0-2-1.5-3-1.5-3-1.5-.28 1.15-.28 2.35 0 3.5a4.8 4.8 0 0 0-1 3.5V22"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg></span>
+                <span>GitHub</span>
+            </div>
+            <div class="tab" data-tab="about" role="tab" aria-selected="false" onclick="switchTab('about')">
+                <span class="tab-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg></span>
+                <span>About</span>
+            </div>
         </div>
 
         <div id="current-tab" class="tab-content active">
             <div id="hero-card" class="hero-card" hidden>
+                <h2 class="hero-card-heading">Status overview</h2>
                 <div class="hero-grid">
                     <div class="hero-panel hero-panel--health">
                         <div class="hero-panel-head">
@@ -994,7 +1181,10 @@
                     </div>
                 </div>
             </div>
-            <div id="projects"></div>
+            <section class="status-projects-section" aria-labelledby="projects-section-heading">
+                <h2 class="status-section-heading" id="projects-section-heading">Per-project results</h2>
+                <div id="projects"></div>
+            </section>
             <div class="status-summary">
                 <div class="last-updated" id="lastUpdated">Last ping: Never</div>
                 <div class="last-updated" id="nextPing">Pings are running every 15 minutes via GitHub Actions</div>
@@ -1099,6 +1289,27 @@
                 return '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg>';
             }
             return '<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>';
+        }
+
+        function escapeHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;');
+        }
+
+        const DETAILS_TOGGLE_CHEVRON_SVG =
+            '<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 9 6 6 6-6"/></svg>';
+
+        const GITHUB_TAB_LOADING_ICON_SVG =
+            '<svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.38-5.14-.38-7.76 0-2-1.5-3-1.5-3-1.5-.28 1.15-.28 2.35 0 3.5a4.8 4.8 0 0 0-1 3.5V22"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>';
+
+        function runConclusionIconStatus(conclusion) {
+            const c = String(conclusion || '').toLowerCase();
+            if (c === 'success') return 'success';
+            if (c === 'failure') return 'error';
+            return 'unknown';
         }
 
         const MANUAL_PING_COOLDOWN_MS = 45000;
@@ -1555,6 +1766,7 @@
             // Show loading state
             document.getElementById('github-runs').innerHTML = `
                 <div class="loading-container">
+                    <span class="github-tab-state-icon" aria-hidden="true">${GITHUB_TAB_LOADING_ICON_SVG}</span>
                     <div class="loading"></div>
                     <div class="loading-text">Fetching GitHub Actions history...</div>
                 </div>
@@ -1606,7 +1818,10 @@
                 console.error('Error fetching GitHub history:', error);
                 document.getElementById('github-runs').innerHTML = `
                     <div class="project error">
-                        <div class="error-details">Failed to fetch GitHub Actions history: ${error.message}</div>
+                        <div class="github-fetch-error">
+                            <span class="github-tab-state-icon" aria-hidden="true">${projectStatusIconSvg('error')}</span>
+                            <div class="error-details">Failed to fetch GitHub Actions history: ${escapeHtml(error.message)}</div>
+                        </div>
                     </div>
                 `;
             }
@@ -1628,15 +1843,21 @@
                 
                 const header = document.createElement('div');
                 header.className = 'github-run-header';
-                
+
+                const runIcon = document.createElement('span');
+                runIcon.className = 'github-run-icon';
+                runIcon.setAttribute('aria-hidden', 'true');
+                runIcon.innerHTML = projectStatusIconSvg(runConclusionIconStatus(run.conclusion));
+
                 const title = document.createElement('span');
                 title.className = 'github-run-title';
                 title.textContent = run.event === 'schedule' ? 'Automatic Run' : 'Manual Run';
-                
+
                 const status = document.createElement('span');
                 status.className = `github-run-status ${run.conclusion === 'success' ? 'success' : 'failure'}`;
                 status.textContent = (run.conclusion || 'UNKNOWN').toUpperCase();
-                
+
+                header.appendChild(runIcon);
                 header.appendChild(title);
                 header.appendChild(status);
                 
@@ -1654,29 +1875,19 @@
 
                 // Add details toggle button
                 const detailsToggle = document.createElement('button');
+                detailsToggle.type = 'button';
                 detailsToggle.className = 'details-toggle';
                 detailsToggle.innerHTML = `
-                    <span class="details-toggle-icon">▼</span>
-                    Show Details
+                    <span class="details-toggle-chevron" aria-hidden="true">${DETAILS_TOGGLE_CHEVRON_SVG}</span>
+                    <span class="details-toggle-label">Show Details</span>
                 `;
                 detailsToggle.onclick = () => {
                     const content = runDiv.querySelector('.run-details-content');
-                    const icon = detailsToggle.querySelector('.details-toggle-icon');
-                    if (content.classList.contains('expanded')) {
-                        content.classList.remove('expanded');
-                        icon.classList.remove('expanded');
-                        detailsToggle.innerHTML = `
-                            <span class="details-toggle-icon">▼</span>
-                            Show Details
-                        `;
-                    } else {
-                        content.classList.add('expanded');
-                        icon.classList.add('expanded');
-                        detailsToggle.innerHTML = `
-                            <span class="details-toggle-icon">▼</span>
-                            Hide Details
-                        `;
-                    }
+                    const label = detailsToggle.querySelector('.details-toggle-label');
+                    const chevron = detailsToggle.querySelector('.details-toggle-chevron');
+                    const expanded = content.classList.toggle('expanded');
+                    if (label) label.textContent = expanded ? 'Hide Details' : 'Show Details';
+                    if (chevron) chevron.classList.toggle('expanded', expanded);
                 };
 
                 // Add details content
@@ -1693,20 +1904,27 @@
                     <div class="run-details-section">
                         <h4>Project Status</h4>
                         <ul class="project-status-list">
-                            ${run.results ? run.results.map(project => `
+                            ${run.results ? run.results.map((project) => {
+                                const raw = String(project.status || '').toLowerCase();
+                                const badgeClass = raw === 'success' ? 'success' : raw === 'error' ? 'error' : 'unknown';
+                                const labelText = raw === 'success' || raw === 'error' ? raw.toUpperCase() : 'UNKNOWN';
+                                const name = escapeHtml(project.name || '');
+                                const errHtml = project.error ? `<br>Error: ${escapeHtml(project.error)}` : '';
+                                return `
                                 <li class="project-status-item">
                                     <div class="project-status-header">
-                                        <span class="project-status-name">${project.name}</span>
-                                        <span class="project-status-badge ${project.status}">${project.status.toUpperCase()}</span>
+                                        <span class="project-status-icon--compact ${badgeClass}" aria-hidden="true">${projectStatusIconSvg(project.status)}</span>
+                                        <span class="project-status-name">${name}</span>
+                                        <span class="project-status-badge ${badgeClass}">${labelText}</span>
                                     </div>
                                     <div class="project-status-details">
                                         ${project.restStatus ? `<span>REST API: <span class="status-badge ${project.restStatus === 200 ? 'success' : 'error'}">${project.restStatus}</span></span>` : ''}
                                         ${project.restStatus && project.dbStatus ? ' | ' : ''}
                                         ${project.dbStatus ? `<span>Database: <span class="status-badge ${project.dbStatus === 200 ? 'success' : 'error'}">${project.dbStatus}</span></span>` : ''}
-                                        ${project.error ? `<br>Error: ${project.error}` : ''}
+                                        ${errHtml}
                                     </div>
-                                </li>
-                            `).join('') : '<li>No project status available</li>'}
+                                </li>`;
+                            }).join('') : '<li>No project status available</li>'}
                         </ul>
                     </div>
                 `;
@@ -1732,19 +1950,17 @@
         }
 
         function switchTab(tabName) {
-            // Update tab styles
             document.querySelectorAll('.tab').forEach(tab => {
-                tab.classList.remove('active');
+                const active = tab.dataset.tab === tabName;
+                tab.classList.toggle('active', active);
+                tab.setAttribute('aria-selected', active ? 'true' : 'false');
             });
-            document.querySelector(`.tab[onclick="switchTab('${tabName}')"]`).classList.add('active');
-            
-            // Update content visibility
+
             document.querySelectorAll('.tab-content').forEach(content => {
                 content.classList.remove('active');
             });
             document.getElementById(`${tabName}-tab`).classList.add('active');
-            
-            // Fetch GitHub history if switching to history tab
+
             if (tabName === 'history') {
                 fetchGitHubHistory();
             }
