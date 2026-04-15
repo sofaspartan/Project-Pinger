@@ -32,3 +32,30 @@ A GitHub Actions-based tool that automatically pings multiple Supabase projects 
 ## Manual Trigger
 
 You can manually trigger the pinger from the GitHub Actions tab in your repository.
+
+## Vercel dashboard (status UI)
+
+The **front-end status page** is `public/index.html`. After deploy, open your Vercel **production URL** (root `/`). It calls:
+
+- **`GET /api/ping`** — runs the same Supabase pings as `ping.js` (uses `PINGER_CONFIG_JSON` on the server).
+- **`GET /api/github`** — reads GitHub Actions history for this repo (uses `GITHUB_TOKEN`).
+
+### Deploy
+
+1. Install the CLI: `npm i -g vercel`, or connect the GitHub repo in the [Vercel dashboard](https://vercel.com/new) (**Import** → pick `Project-Pinger`).
+2. From the project root: `vercel` (preview) or `vercel --prod` (production). With GitHub import, every push to `main` can auto-deploy.
+
+### Environment variables (Vercel)
+
+In the Vercel project: **Settings → Environment Variables**. Add for **Production** (and **Preview** if you use previews):
+
+| Name | Value |
+|------|--------|
+| `PINGER_CONFIG_JSON` | Same JSON string as the GitHub secret: full `config` object with `supabase_projects` and each project’s `url` + `secret_key` (or `service_role_key`). |
+| `GITHUB_TOKEN` | A GitHub [personal access token](https://github.com/settings/tokens) with **`actions:read`** (and **`repo`** scope if you use a classic PAT on a private repo). Needed for the **GitHub** tab and job logs. |
+
+Redeploy after saving env vars (**Deployments → … → Redeploy** or push an empty commit).
+
+### Security note
+
+`/api/ping` is a **public** URL on Vercel. The browser never receives your Supabase keys, but **anyone who can open the site can trigger** a ping run on your server (abuse / quota). The JSON still holds **service_role**-level secrets—treat `PINGER_CONFIG_JSON` as highly sensitive and rotate if it leaks.
