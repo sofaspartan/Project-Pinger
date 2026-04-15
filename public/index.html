@@ -245,64 +245,129 @@
 
         .hero-card {
             margin-bottom: 24px;
-            padding: 22px 24px;
-            border-radius: var(--border-radius);
-            background: linear-gradient(135deg, #f6fffb 0%, #f0f7ff 100%);
-            border: 1px solid #d9e8e0;
+            padding: 14px;
+            border-radius: 12px;
+            background: linear-gradient(160deg, #eef6f1 0%, #e8eef6 50%, #f0f4f8 100%);
+            border: 1px solid #dbe4e8;
             box-shadow: var(--shadow);
         }
 
-        .hero-card-row {
+        .hero-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 14px;
+        }
+
+        .hero-panel {
+            background: #fff;
+            border: 1px solid #e8edf2;
+            border-radius: 10px;
+            padding: 14px 16px 16px;
+            box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
             display: flex;
-            flex-wrap: wrap;
-            gap: 24px;
-            align-items: stretch;
-            justify-content: space-between;
+            flex-direction: column;
+            min-height: 0;
         }
 
-        .hero-summary {
-            flex: 0 0 auto;
-            min-width: 160px;
+        .hero-panel-head {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
         }
 
-        .hero-summary-label {
-            font-size: 0.85em;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            font-weight: 600;
+        .hero-panel-icon {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 10px;
+            flex-shrink: 0;
         }
 
-        .hero-summary-value {
-            font-size: 2.4em;
-            font-weight: 700;
+        .hero-panel-icon svg {
+            display: block;
+        }
+
+        .hero-panel--health .hero-panel-icon {
+            background: rgba(62, 207, 142, 0.14);
             color: var(--primary-dark);
-            line-height: 1.1;
-            margin-top: 6px;
         }
 
-        .hero-summary-note {
-            margin-top: 8px;
-            font-size: 0.95em;
+        .hero-panel--trend .hero-panel-icon {
+            background: rgba(37, 99, 235, 0.1);
+            color: #1d4ed8;
+        }
+
+        .hero-panel--last .hero-panel-icon {
+            background: rgba(71, 85, 105, 0.1);
             color: #475569;
         }
 
-        .hero-sparkline-block {
-            flex: 1 1 220px;
-            min-width: 200px;
+        .hero-panel--next .hero-panel-icon {
+            background: rgba(217, 119, 6, 0.12);
+            color: #b45309;
         }
 
-        .hero-sparkline-label {
-            font-size: 0.85em;
+        .hero-panel-head-text {
+            flex: 1;
+            min-width: 0;
+        }
+
+        .hero-panel-title-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 6px 10px;
+        }
+
+        .hero-panel-title {
+            font-size: 1.05em;
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: -0.01em;
+        }
+
+        .hero-panel-badge {
+            font-size: 0.72em;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
             color: #64748b;
-            margin-bottom: 8px;
-            font-weight: 500;
+            background: #f1f5f9;
+            padding: 3px 8px;
+            border-radius: 999px;
         }
 
-        .hero-sparkline-axes {
-            font-weight: 400;
+        .hero-panel-meta {
+            font-size: 0.8em;
             color: #94a3b8;
-            font-size: 0.85em;
+            margin-top: 4px;
+            line-height: 1.35;
+        }
+
+        .hero-panel-stat {
+            font-size: 2.25em;
+            font-weight: 800;
+            color: var(--primary-dark);
+            line-height: 1.05;
+            letter-spacing: -0.02em;
+        }
+
+        .hero-panel-note {
+            margin-top: 8px;
+            font-size: 0.92em;
+            color: #475569;
+            line-height: 1.45;
+        }
+
+        .hero-sparkline-wrap {
+            margin-top: 2px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
         }
 
         .hero-sparkline-svg {
@@ -313,46 +378,31 @@
         }
 
         .hero-sparkline-status {
-            font-size: 0.8em;
+            font-size: 0.75em;
             color: #94a3b8;
-            margin-top: 6px;
-        }
-
-        .hero-schedule-row {
-            margin-top: 20px;
-            padding-top: 18px;
-            border-top: 1px solid rgba(100, 148, 176, 0.25);
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px 32px;
-            align-items: flex-start;
-        }
-
-        .hero-schedule-item {
-            flex: 1 1 200px;
-            min-width: 160px;
-        }
-
-        .hero-schedule-label {
-            font-size: 0.8em;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-            font-weight: 600;
-            margin-bottom: 6px;
+            margin-top: 8px;
+            line-height: 1.4;
         }
 
         .hero-schedule-primary {
-            font-size: 1.35em;
+            font-size: 1.28em;
             font-weight: 700;
             color: #1e293b;
             line-height: 1.25;
+            margin-top: 2px;
         }
 
         .hero-schedule-sub {
-            margin-top: 4px;
-            font-size: 0.85em;
+            margin-top: 6px;
+            font-size: 0.86em;
             color: #64748b;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 700px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         .ping-cooldown-hint {
@@ -797,29 +847,73 @@
 
         <div id="current-tab" class="tab-content active">
             <div id="hero-card" class="hero-card" hidden>
-                <div class="hero-card-row">
-                    <div class="hero-summary">
-                        <div class="hero-summary-label">Fleet health (this ping)</div>
-                        <div id="hero-summary-value" class="hero-summary-value">—</div>
-                        <div id="hero-summary-note" class="hero-summary-note"></div>
-                    </div>
-                    <div class="hero-sparkline-block">
-                        <div class="hero-sparkline-label">
-                            Last <span id="hero-sparkline-count">—</span> GitHub Actions runs
-                            <span class="hero-sparkline-axes">· older ← → newer</span>
+                <div class="hero-grid">
+                    <div class="hero-panel hero-panel--health">
+                        <div class="hero-panel-head">
+                            <span class="hero-panel-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="m9 12 2 2 4-4"/></svg>
+                            </span>
+                            <div class="hero-panel-head-text">
+                                <div class="hero-panel-title-row">
+                                    <span class="hero-panel-title">Fleet health</span>
+                                    <span class="hero-panel-badge">This ping</span>
+                                </div>
+                                <div class="hero-panel-meta">Projects reporting success vs total</div>
+                            </div>
                         </div>
-                        <svg id="hero-sparkline-svg" class="hero-sparkline-svg" viewBox="0 0 280 52" preserveAspectRatio="none" role="img" aria-label="Share of projects healthy per workflow run"></svg>
-                        <div id="hero-sparkline-status" class="hero-sparkline-status"></div>
+                        <div id="hero-summary-value" class="hero-panel-stat">—</div>
+                        <div id="hero-summary-note" class="hero-panel-note"></div>
                     </div>
-                </div>
-                <div class="hero-schedule-row">
-                    <div class="hero-schedule-item">
-                        <div class="hero-schedule-label">Last ping</div>
+
+                    <div class="hero-panel hero-panel--trend">
+                        <div class="hero-panel-head">
+                            <span class="hero-panel-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M7 12l4-4 4 4 6-7"/></svg>
+                            </span>
+                            <div class="hero-panel-head-text">
+                                <div class="hero-panel-title-row">
+                                    <span class="hero-panel-title">Run history trend</span>
+                                </div>
+                                <div class="hero-panel-meta">
+                                    Last <span id="hero-sparkline-count">—</span> GitHub Actions runs · older <span aria-hidden="true">←</span> to <span aria-hidden="true">→</span> newer
+                                </div>
+                            </div>
+                        </div>
+                        <div class="hero-sparkline-wrap">
+                            <svg id="hero-sparkline-svg" class="hero-sparkline-svg" viewBox="0 0 280 52" preserveAspectRatio="none" role="img" aria-label="Share of projects healthy per workflow run"></svg>
+                            <div id="hero-sparkline-status" class="hero-sparkline-status"></div>
+                        </div>
+                    </div>
+
+                    <div class="hero-panel hero-panel--last">
+                        <div class="hero-panel-head">
+                            <span class="hero-panel-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                            </span>
+                            <div class="hero-panel-head-text">
+                                <div class="hero-panel-title-row">
+                                    <span class="hero-panel-title">Last ping</span>
+                                </div>
+                                <div class="hero-panel-meta">From this dashboard or API</div>
+                            </div>
+                        </div>
                         <div id="hero-last-ping-relative" class="hero-schedule-primary">—</div>
                         <div id="hero-last-ping-absolute" class="hero-schedule-sub"></div>
                     </div>
-                    <div class="hero-schedule-item">
-                        <div class="hero-schedule-label">Next scheduled ping (est.)</div>
+
+                    <div class="hero-panel hero-panel--next">
+                        <div class="hero-panel-head">
+                            <span class="hero-panel-icon" aria-hidden="true">
+                                <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+                            </span>
+                            <div class="hero-panel-head-text">
+                                <div class="hero-panel-title-row">
+                                    <span class="hero-panel-title">Next ping</span>
+                                    <span class="hero-panel-badge">Est.</span>
+                                </div>
+                                <div class="hero-panel-meta">Based on last ping + 15 min cadence</div>
+                            </div>
+                        </div>
                         <div id="hero-next-ping-relative" class="hero-schedule-primary">—</div>
                         <div id="hero-next-ping-absolute" class="hero-schedule-sub"></div>
                     </div>
