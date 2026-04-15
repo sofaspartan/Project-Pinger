@@ -12,19 +12,22 @@ A GitHub Actions-based tool that automatically pings multiple Supabase projects 
 ## Setup
 
 1. Clone this repository
-2. Update `config.json` with your Supabase project details:
+2. Copy `config.example.json` to `config.json` (gitignored) and add your projects. Each project needs the **Supabase secret (service_role) API key** — the same credential PostgREST expects for your ping endpoint:
    ```json
    {
      "supabase_projects": [
        {
          "name": "Your Project Name",
          "url": "https://your-project-id.supabase.co",
-         "anon_key": "your-anon-key"
+         "secret_key": "your-secret-key"
        }
-     ]
+     ],
+     "ping_interval_minutes": 15
    }
    ```
-3. The GitHub Action will automatically start pinging your projects every 15 minutes
+   You can use `service_role_key` instead of `secret_key` if you prefer that field name (same value).
+3. For **GitHub Actions**, add a repository secret `PINGER_CONFIG_JSON` whose value is that entire JSON document. Do not commit real keys.
+4. The GitHub Action runs on the schedule in `.github/workflows/ping.yml` and pings your projects automatically.
 
 ## Manual Trigger
 

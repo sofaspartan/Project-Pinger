@@ -16,9 +16,13 @@ function loadConfig() {
 }
 
 function projectApiKey(project) {
-  const key = project.publishable_key ?? project.anon_key;
+  const key =
+    project.secret_key ??
+    project.service_role_key;
   if (!key) {
-    throw new Error(`Project "${project.name}" needs publishable_key or anon_key.`);
+    throw new Error(
+      `Project "${project.name}" needs secret_key (Supabase default secret / service_role JWT).`
+    );
   }
   return key;
 }

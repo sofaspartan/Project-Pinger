@@ -3,7 +3,7 @@
     {
       "name": "Example project",
       "url": "https://YOUR_PROJECT_REF.supabase.co",
-      "publishable_key": "sb_publishable_... or legacy anon JWT"
+      "secret_key": "sb_secret_... or legacy service_role JWT — never commit; use GitHub secret PINGER_CONFIG_JSON"
     }
   ],
   "ping_interval_minutes": 15
