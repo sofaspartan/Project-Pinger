@@ -1,4 +1,5 @@
 const axios = require('axios');
+const { loadConfig, projectApiKey } = require('../configLoader');
 
 module.exports = async (req, res) => {
   try {
@@ -25,14 +26,13 @@ module.exports = async (req, res) => {
 
     console.log('Starting ping process...');
     
-    // Try to load config
     let config;
     try {
-      config = require('../config.json');
+      config = loadConfig();
       console.log('Config loaded successfully');
     } catch (configError) {
       console.error('Error loading config:', configError);
-      res.status(500).json({ 
+      res.status(500).json({
         success: false,
         error: 'Failed to load configuration',
         details: configError.message
@@ -45,24 +45,23 @@ module.exports = async (req, res) => {
     for (const project of config.supabase_projects) {
       console.log(`Pinging project: ${project.name}`);
       try {
-        // First, ping the REST API
+        const apiKey = projectApiKey(project);
         const restResponse = await axios.get(`${project.url}/rest/v1/`, {
           timeout: 10000,
           headers: {
-            'apikey': project.anon_key,
-            'Authorization': `Bearer ${project.anon_key}`
+            apikey: apiKey,
+            Authorization: `Bearer ${apiKey}`
           }
         });
 
-        // Then, make a database query to ensure real activity
         const dbResponse = await axios.post(
           `${project.url}/rest/v1/rpc/ping`,
           {},
           {
             timeout: 10000,
             headers: {
-              'apikey': project.anon_key,
-              'Authorization': `Bearer ${project.anon_key}`,
+              apikey: apiKey,
+              Authorization: `Bearer ${apiKey}`,
               'Content-Type': 'application/json',
               'Prefer': 'return=minimal'
             }

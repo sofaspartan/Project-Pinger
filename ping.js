@@ -1,12 +1,11 @@
 const axios = require('axios');
-const fs = require('fs');
+const { loadConfig, projectApiKey } = require('./configLoader');
 
 async function pingProjects() {
   try {
     console.error('Starting ping process...');
 
-    // Load config
-    const config = JSON.parse(fs.readFileSync('./config.json', 'utf8'));
+    const config = loadConfig();
     console.error('Config loaded successfully');
 
     const results = [];
@@ -14,16 +13,15 @@ async function pingProjects() {
     for (const project of config.supabase_projects) {
       console.error(`Pinging project: ${project.name}`);
       try {
-        // First, ping the REST API
+        const apiKey = projectApiKey(project);
         const restResponse = await axios.get(`${project.url}/rest/v1/`, {
           timeout: 10000,
           headers: {
-            'apikey': project.anon_key,
-            'Authorization': `Bearer ${project.anon_key}`
+            apikey: apiKey,
+            Authorization: `Bearer ${apiKey}`
           }
         });
 
-        // Then, make a database query to ensure real activity (optional - requires setup.sql in project)
         let dbStatus = null;
         try {
           const dbResponse = await axios.post(
@@ -32,16 +30,15 @@ async function pingProjects() {
             {
               timeout: 10000,
               headers: {
-                'apikey': project.anon_key,
-                'Authorization': `Bearer ${project.anon_key}`,
+                apikey: apiKey,
+                Authorization: `Bearer ${apiKey}`,
                 'Content-Type': 'application/json',
-                'Prefer': 'return=minimal'
+                Prefer: 'return=minimal'
               }
             }
           );
           dbStatus = dbResponse.status;
         } catch (dbError) {
-          // RPC may be missing; REST ping still keeps project awake
           console.error(`  RPC ping skipped for ${project.name}:`, dbError.message);
         }
 
@@ -67,7 +64,6 @@ async function pingProjects() {
 
     console.error('Ping process completed');
 
-    // Output results as JSON to stdout only (for GitHub Actions artifact)
     process.stdout.write(JSON.stringify({
       timestamp: new Date().toISOString(),
       results

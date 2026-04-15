@@ -12,16 +12,16 @@ jobs:
   ping:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
-      
+      - uses: actions/checkout@v4
+
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18'
-          
+          node-version: '20'
+
       - name: Install dependencies
         run: npm install
-        
+
       - name: Run ping
         id: ping
         run: |
@@ -36,11 +36,12 @@ jobs:
           echo "Results:"
           cat ping-results.json
         env:
+          PINGER_CONFIG_JSON: ${{ secrets.PINGER_CONFIG_JSON }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload ping results
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v5
         with:
           name: ping-results
           path: ping-results.json
-          retention-days: 30 
+          retention-days: 30
