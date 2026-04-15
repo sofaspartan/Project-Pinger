@@ -658,40 +658,97 @@
             background-color: #e9ecef;
         }
 
-        .about-section {
-            padding: 20px;
-            background-color: var(--bg-color);
-            border-radius: var(--border-radius);
+        .about-acc {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .about-acc-item {
             border: 1px solid #e9ecef;
+            border-radius: var(--border-radius);
+            background-color: #fff;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
         }
 
-        .about-section h2 {
-            color: var(--primary-color);
-            margin-top: 0;
-            font-size: 1.8em;
-            margin-bottom: 20px;
-        }
-
-        .about-section h3 {
+        .about-acc-item > summary {
+            list-style: none;
+            cursor: pointer;
+            padding: 14px 16px;
+            font-weight: 600;
+            font-size: 1.05em;
             color: var(--text-color);
-            font-size: 1.4em;
-            margin-top: 30px;
-            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            user-select: none;
         }
 
-        .about-section p {
-            margin-bottom: 20px;
-            line-height: 1.6;
+        .about-acc-item > summary::-webkit-details-marker {
+            display: none;
         }
 
-        .about-section ul {
-            margin-bottom: 20px;
-            padding-left: 20px;
+        .about-acc-item > summary::after {
+            content: '▾';
+            font-size: 0.65em;
+            color: #64748b;
+            transition: transform 0.2s ease;
+            flex-shrink: 0;
         }
 
-        .about-section li {
+        .about-acc-item[open] > summary::after {
+            transform: rotate(-180deg);
+        }
+
+        .about-acc-item > summary:hover {
+            color: var(--primary-dark);
+        }
+
+        .about-acc-body {
+            padding: 0 16px 16px;
+            border-top: 1px solid #eef1f4;
+            font-size: 0.98em;
+            line-height: 1.65;
+            color: #334155;
+        }
+
+        .about-acc-body > p {
+            margin: 0 0 12px;
+        }
+
+        .about-acc-body > p:last-child {
+            margin-bottom: 0;
+        }
+
+        .about-acc-body .about-lead {
             margin-bottom: 10px;
-            line-height: 1.6;
+            color: #475569;
+        }
+
+        .about-acc-body ul {
+            margin: 0 0 12px;
+            padding-left: 1.25em;
+        }
+
+        .about-acc-body li {
+            margin-bottom: 6px;
+        }
+
+        .about-acc-body li:last-child {
+            margin-bottom: 0;
+        }
+
+        .about-acc-body strong {
+            color: #1e293b;
+        }
+
+        .about-acc-body code {
+            font-size: 0.9em;
+            background: #f1f5f9;
+            padding: 0.12em 0.4em;
+            border-radius: 4px;
+            font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
         }
 
         .loading-container {
@@ -780,52 +837,84 @@
         </div>
 
         <div id="about-tab" class="tab-content">
-            <div class="about-section">
-                <h2>What is Supabase Project Pinger?</h2>
-                <p>Supabase Project Pinger is a tool designed to keep your Supabase projects active by automatically pinging them at regular intervals. This helps prevent your projects from going to sleep and ensures they remain responsive.</p>
-                
-                <h3>Key Features</h3>
-                <ul>
-                    <li>Automated pinging of multiple Supabase projects</li>
-                    <li>Real-time status monitoring</li>
-                    <li>Detailed response tracking</li>
-                    <li>GitHub Actions integration for reliable scheduling</li>
-                    <li>Manual ping capability</li>
-                </ul>
+            <div class="about-acc" role="region" aria-label="About Supabase Project Pinger">
+                <details class="about-acc-item" open>
+                    <summary>Overview</summary>
+                    <div class="about-acc-body">
+                        <p>
+                            Supabase Project Pinger keeps your Supabase projects exercised on a schedule so they stay responsive and easier to debug at a glance.
+                        </p>
+                        <p>
+                            Traffic is driven by GitHub Actions (every 15 minutes) and this dashboard, which calls your projects the same way the automation does.
+                        </p>
+                    </div>
+                </details>
 
-                <h3>How It Works</h3>
-                <p>The pinger runs every 15 minutes via GitHub Actions, checking both the REST API and database connections of your Supabase projects. It provides immediate feedback on the status of each project and maintains a history of all ping attempts.</p>
+                <details class="about-acc-item">
+                    <summary>What you get</summary>
+                    <div class="about-acc-body">
+                        <p class="about-lead">The dashboard and workflow provide:</p>
+                        <ul>
+                            <li>Scheduled pings across many Supabase projects</li>
+                            <li>Live status view and optional manual ping (rate-limited)</li>
+                            <li>Per-project REST and database check results</li>
+                            <li>GitHub Actions history and <code>ping-results</code> artifacts in the GitHub tab</li>
+                        </ul>
+                    </div>
+                </details>
 
-                <h3>Status Responses</h3>
-                <p>Each project ping checks two components:</p>
-                <ul>
-                    <li><strong>REST API (200)</strong>: A successful response (200) indicates that the Supabase REST API is accessible and responding correctly. This means your project's API endpoints are active and ready to handle requests.</li>
-                    <li><strong>Database (200)</strong>: A successful response (200) indicates that the database connection is working properly. This means your project can execute database queries and maintain data operations.</li>
-                </ul>
-                <p>If either check fails, you'll see an error status with details about what went wrong. Common issues include:</p>
-                <ul>
-                    <li>Project is sleeping (requires a wake-up)</li>
-                    <li>Network connectivity issues</li>
-                    <li>Authentication problems</li>
-                    <li>Database connection failures</li>
-                </ul>
+                <details class="about-acc-item">
+                    <summary>How it runs</summary>
+                    <div class="about-acc-body">
+                        <p>
+                            A workflow on GitHub installs dependencies, loads your configuration from secrets, runs the Node pinger, uploads <code>ping-results.json</code> as an artifact, and can be triggered on a cron, on push, or by hand.
+                        </p>
+                        <p>
+                            Each project is hit on the Supabase REST root and, when available, an optional <code>rpc/ping</code> call so you see both API reachability and database activity in one pass.
+                        </p>
+                    </div>
+                </details>
 
-                <h3>Benefits</h3>
-                <ul>
-                    <li>Prevents project sleep timeouts</li>
-                    <li>Maintains consistent project availability</li>
-                    <li>Provides visibility into project health</li>
-                    <li>Automated monitoring without manual intervention</li>
-                </ul>
+                <details class="about-acc-item">
+                    <summary>Reading status checks</summary>
+                    <div class="about-acc-body">
+                        <p>
+                            <strong>REST layer.</strong> A <code>200</code> from the REST entrypoint means PostgREST answered for that project with the credentials you configured—your edge URL and API surface are up.
+                        </p>
+                        <p>
+                            <strong>Database signal.</strong> A <code>200</code> on the optional RPC step means that call completed; if the RPC is missing, the UI may show REST only for that run.
+                        </p>
+                        <p class="about-lead">When something fails, the card shows an error string; frequent causes include:</p>
+                        <ul>
+                            <li>Cold or paused project waking up</li>
+                            <li>Network or timeout issues</li>
+                            <li>API key or permission mismatch</li>
+                            <li>RPC not deployed or not granted to the key you use</li>
+                        </ul>
+                    </div>
+                </details>
 
-                <h3>Technical Details</h3>
-                <p>This tool is built using:</p>
-                <ul>
-                    <li>Node.js for the backend</li>
-                    <li>GitHub Actions for scheduling</li>
-                    <li>Vercel for hosting</li>
-                    <li>Supabase REST API for project interaction</li>
-                </ul>
+                <details class="about-acc-item">
+                    <summary>Why use a pinger</summary>
+                    <div class="about-acc-body">
+                        <p>
+                            Small demos and side projects often sit idle; periodic traffic reduces “first load after silence” surprises, gives you an early warning when keys or endpoints break, and pairs with Row Level Security so publishable-style keys stay appropriate for what the checks touch.
+                        </p>
+                    </div>
+                </details>
+
+                <details class="about-acc-item">
+                    <summary>Technology</summary>
+                    <div class="about-acc-body">
+                        <p class="about-lead">Primary stack:</p>
+                        <ul>
+                            <li>Node.js + Axios for HTTP</li>
+                            <li>GitHub Actions for scheduling and artifacts</li>
+                            <li>Vercel serverless <code>/api/ping</code> and <code>/api/github</code> for this UI</li>
+                            <li>Supabase REST (and optional RPC) for each project</li>
+                        </ul>
+                    </div>
+                </details>
             </div>
         </div>
     </div>
@@ -1174,8 +1263,9 @@
         }
 
         function applyPingScheduleTimes(lastPingTime) {
-            lastPingScheduleAt = new Date(lastPingTime);
-            nextPingScheduleAt = new Date(lastPingTime.getTime() + PING_CADENCE_MS);
+            const last = new Date(lastPingTime);
+            lastPingScheduleAt = last;
+            nextPingScheduleAt = new Date(last.getTime() + PING_CADENCE_MS);
             refreshPingScheduleDisplay();
         }
 
